@@ -19,5 +19,23 @@ if (!isset($voiture)) {
     <label for="moteur">Moteur</label>
     <input type="text" name="moteur" id="moteur" value="<?= htmlspecialchars($voiture['moteur']) ?>" required><br>
 
+    <label for="id_ecurie">Écurie</label>
+    <select name="id_ecurie" id="id_ecurie" required>
+        <option value="">Sélectionnez une écurie</option>
+        <?php
+        // Charger les écuries disponibles depuis la base de données
+        $database = new Database();
+        $conn = $database->getConnection();
+        $query = "SELECT id_ecurie, nom FROM ecuries";
+        $stmt = $conn->prepare($query);
+        $stmt->execute();
+        $ecuries = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($ecuries as $ecurie) {
+            echo '<option value="' . htmlspecialchars($ecurie['id_ecurie']) . '">' . htmlspecialchars($ecurie['nom']) . '</option>';
+        }
+        ?>
+    </select><br>
+
     <input type="submit" value="Mettre à jour">
 </form>

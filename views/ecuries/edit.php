@@ -21,24 +21,7 @@ if (!isset($ecurie)) {
     <label for="sponsor">Sponsor</label>
     <input type="text" name="sponsor" id="sponsor" value="<?= htmlspecialchars($ecurie['sponsor']) ?>"><br>
 
-    <label for="id_voiture">Voiture</label>
-    <select name="id_voiture" id="id_voiture" required>
-        <option value="">Sélectionnez une voiture</option>
-        <?php
-        // Charger les voitures disponibles depuis la base de données
-        $database = new Database();
-        $conn = $database->getConnection();
-        $query = "SELECT id_voiture, moteur FROM voitures";
-        $stmt = $conn->prepare($query);
-        $stmt->execute();
-        $voitures = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        foreach ($voitures as $voiture) {
-            $selected = $voiture['id_voiture'] == $ecurie['id_voiture'] ? 'selected' : '';
-            echo '<option value="' . htmlspecialchars($voiture['id_voiture']) . '" ' . $selected . '>' . htmlspecialchars($voiture['moteur']) . '</option>';
-        }
-        ?>
-    </select><br>
+    
 
     <!-- Bouton pour soumettre les modifications -->
     <input type="submit" value="Mettre à jour">
