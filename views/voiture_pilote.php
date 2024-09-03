@@ -1,23 +1,22 @@
 <?php include 'views/partials/header.php'; ?>
 
-<h2>Liste des Pilotes et leurs Voitures associées</h2>
+<h2>Liste des Pilotes et leurs Voitures</h2>
 
-<div class="table-container"> <!-- Ajout de la div table-container -->
-    <table>
-        <thead>
+<table border="1">
+    <thead>
+        <tr>
+            <th>Pilote</th>
+            <th>Voiture</th>
+            <th>Écurie</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($result as $row): ?>
             <tr>
-                <th>Pilote</th>
-                <th>Moteur de la Voiture</th>
+                <td><?= htmlspecialchars($row['pilote_nom']) ?></td>
+                <td><?= htmlspecialchars($row['voiture_moteur']) ?></td>
+                <td><?= htmlspecialchars($row['ecurie_nom']) ?></td>
             </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($result as $row): ?>
-                <tr>
-                    <td><?= htmlspecialchars($row['pilote_nom']) ?></td>
-                    <td><?= htmlspecialchars($row['voiture_moteur']) ?></td>
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
-</div>
-
+        <?php endforeach; ?>
+    </tbody>
+</table>

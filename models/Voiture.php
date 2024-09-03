@@ -6,14 +6,48 @@ class Voiture {
     private $conn;
     private $table_name = "voitures";
 
-    public $id_voiture;
-    public $poids;
-    public $puissance;
-    public $moteur;
+    private $id_voiture;
+    private $poids;
+    private $puissance;
+    private $moteur;
 
     public function __construct() {
         $database = new Database();
         $this->conn = $database->getConnection();
+    }
+
+    // Getters
+    public function getIdVoiture() {
+        return $this->id_voiture;
+    }
+
+    public function getPoids() {
+        return $this->poids;
+    }
+
+    public function getPuissance() {
+        return $this->puissance;
+    }
+
+    public function getMoteur() {
+        return $this->moteur;
+    }
+
+    // Setters
+    public function setIdVoiture($id_voiture) {
+        $this->id_voiture = $id_voiture;
+    }
+
+    public function setPoids($poids) {
+        $this->poids = $poids;
+    }
+
+    public function setPuissance($puissance) {
+        $this->puissance = $puissance;
+    }
+
+    public function setMoteur($moteur) {
+        $this->moteur = $moteur;
     }
 
     // Lire toutes les voitures
@@ -64,20 +98,22 @@ class Voiture {
         $query = "UPDATE " . $this->table_name . " 
                   SET poids = :poids, puissance = :puissance, moteur = :moteur
                   WHERE id_voiture = :id_voiture";
-
+    
         $stmt = $this->conn->prepare($query);
-
+    
         $stmt->bindParam(':poids', $this->poids);
         $stmt->bindParam(':puissance', $this->puissance);
         $stmt->bindParam(':moteur', $this->moteur);
         $stmt->bindParam(':id_voiture', $this->id_voiture);
-
+    
         if ($stmt->execute()) {
             return true;
+        } else {
+            var_dump($stmt->errorInfo());  // Debug : Affiche les erreurs SQL
+            return false;
         }
-
-        return false;
     }
+    
 
     // Supprimer une voiture
     public function delete() {

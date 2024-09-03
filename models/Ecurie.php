@@ -6,15 +6,57 @@ class Ecurie {
     private $conn;
     private $table_name = "ecuries";
 
-    public $id_ecurie;
-    public $nom;
-    public $pays;
-    public $sponsor;
-    public $id_voiture;
+    private $id_ecurie;
+    private $nom;
+    private $pays;
+    private $sponsor;
+    private $id_voiture;
 
     public function __construct() {
         $database = new Database();
         $this->conn = $database->getConnection();
+    }
+
+    // Getters
+    public function getIdEcurie() {
+        return $this->id_ecurie;
+    }
+
+    public function getNom() {
+        return $this->nom;
+    }
+
+    public function getPays() {
+        return $this->pays;
+    }
+
+    public function getSponsor() {
+        return $this->sponsor;
+    }
+
+    public function getIdVoiture() {
+        return $this->id_voiture;
+    }
+
+    // Setters
+    public function setIdEcurie($id_ecurie) {
+        $this->id_ecurie = $id_ecurie;
+    }
+
+    public function setNom($nom) {
+        $this->nom = $nom;
+    }
+
+    public function setPays($pays) {
+        $this->pays = $pays;
+    }
+
+    public function setSponsor($sponsor) {
+        $this->sponsor = $sponsor;
+    }
+
+    public function setIdVoiture($id_voiture) {
+        $this->id_voiture = $id_voiture;
     }
 
     // Lire toutes les écuries
@@ -28,7 +70,7 @@ class Ecurie {
     // Lire une seule écurie par ID
     public function readSingle() {
         $query = "SELECT * FROM " . $this->table_name . " WHERE id_ecurie = :id_ecurie LIMIT 0,1";
-        $stmt = $this->conn->prepare($query);  // Correction ici, ajout de $this->conn
+        $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':id_ecurie', $this->id_ecurie);
         $stmt->execute();
 

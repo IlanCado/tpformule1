@@ -1,24 +1,25 @@
 <?php include 'views/partials/header.php'; ?>
-
-<h2>Modifier la voiture</h2>
-
 <?php
+// views/voitures/edit.php
+
+// Assurez-vous que les données de la voiture sont chargées avant d'afficher le formulaire.
 if (!isset($voiture)) {
     echo "Données de la voiture non disponibles.";
     exit;
 }
 ?>
 
-<form action="index.php?controller=voiture&action=edit&id=<?= htmlspecialchars($voiture['id_voiture']) ?>" method="POST">
-    <label for="poids">Poids (en kg)</label>
-    <input type="number" name="poids" id="poids" value="<?= htmlspecialchars($voiture['poids']) ?>" required><br>
+<h2>Modifier la voiture</h2>
 
-    <label for="puissance">Puissance (en ch)</label>
-    <input type="number" name="puissance" id="puissance" value="<?= htmlspecialchars($voiture['puissance']) ?>" required><br>
+<form action="index.php?controller=voiture&action=edit&id=<?= htmlspecialchars($voiture->getIdVoiture()) ?>" method="POST">
+    <label for="poids">Poids</label>
+    <input type="text" name="poids" id="poids" value="<?= htmlspecialchars($voiture->getPoids()) ?>" required><br>
+
+    <label for="puissance">Puissance</label>
+    <input type="text" name="puissance" id="puissance" value="<?= htmlspecialchars($voiture->getPuissance()) ?>" required><br>
 
     <label for="moteur">Moteur</label>
-    <input type="text" name="moteur" id="moteur" value="<?= htmlspecialchars($voiture['moteur']) ?>" required><br>
-
+    <input type="text" name="moteur" id="moteur" value="<?= htmlspecialchars($voiture->getMoteur()) ?>" required><br>
     <label for="id_ecurie">Écurie</label>
     <select name="id_ecurie" id="id_ecurie" required>
         <option value="">Sélectionnez une écurie</option>
@@ -36,6 +37,6 @@ if (!isset($voiture)) {
         }
         ?>
     </select><br>
-
+    <!-- Bouton pour soumettre les modifications -->
     <input type="submit" value="Mettre à jour">
 </form>
