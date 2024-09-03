@@ -14,6 +14,7 @@
                 <li class="nav-item"><a href="index.php?controller=ecurie&action=index">Gérer les écuries</a></li>
                 <li class="nav-item"><a href="index.php?controller=pilote&action=index">Gérer les pilotes</a></li>
                 <li class="nav-item"><a href="index.php?controller=voiture&action=index">Gérer les voitures</a></li>
+                <li class="nav-item"><a href="index.php?controller=voiturePilote&action=index">Vue Pilote Voiture</a></li>
             </ul>
         </nav>
     </header>
