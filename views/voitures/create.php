@@ -2,7 +2,7 @@
 
 <h2>Ajouter une nouvelle voiture</h2>
 
-<form action="index.php?controller=voiture&action=create" method="POST">
+<form action="index.php?controller=voiture&action=create" method="POST" enctype="multipart/form-data">
     <label for="poids">Poids (en kg)</label>
     <input type="number" name="poids" id="poids" required><br>
 
@@ -28,6 +28,10 @@
             echo '<option value="' . htmlspecialchars($ecurie['id_ecurie']) . '">' . htmlspecialchars($ecurie['nom']) . '</option>';
         }
         ?>
+
+<label for="photo">Photo</label>
+<input type="file" name="photo" id="photo"><br>
+
     </select><br>
 
     <input type="submit" value="Ajouter">

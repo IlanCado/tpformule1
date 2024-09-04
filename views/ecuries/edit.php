@@ -11,7 +11,7 @@ if (!isset($ecurie)) {
 
 <h2>Modifier l'écurie</h2>
 
-<form action="index.php?controller=ecurie&action=edit&id=<?= htmlspecialchars($ecurie->getIdEcurie()) ?>" method="POST">
+<form action="index.php?controller=ecurie&action=edit&id=<?= htmlspecialchars($ecurie->getIdEcurie()) ?>" method="POST" enctype="multipart/form-data">
     <label for="nom">Nom</label>
     <input type="text" name="nom" id="nom" value="<?= htmlspecialchars($ecurie->getNom()) ?>" required><br>
 
@@ -20,6 +20,9 @@ if (!isset($ecurie)) {
 
     <label for="sponsor">Sponsor</label>
     <input type="text" name="sponsor" id="sponsor" value="<?= htmlspecialchars($ecurie->getSponsor()) ?>"><br>
+
+    <label for="photo">Blason</label>
+    <input type="file" name="blason" id="blason"><br>
 
     <!-- Bouton pour soumettre les modifications -->
     <input type="submit" value="Mettre à jour">

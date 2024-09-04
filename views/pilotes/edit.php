@@ -11,7 +11,7 @@ if (!isset($pilote)) {
 
 <h2>Modifier le pilote</h2>
 
-<form action="index.php?controller=pilote&action=edit&id=<?= htmlspecialchars($pilote->getIdPilote()) ?>" method="POST">
+<form action="index.php?controller=pilote&action=edit&id=<?= htmlspecialchars($pilote->getIdPilote()) ?>" method="POST" enctype="multipart/form-data">
     <label for="numero">Numéro</label>
     <input type="text" name="numero" id="numero" value="<?= htmlspecialchars($pilote->getNumero()) ?>" required><br>
 
@@ -31,15 +31,37 @@ if (!isset($pilote)) {
         $ecuries = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         foreach ($ecuries as $ecurie) {
-            echo '<option value="' . htmlspecialchars($ecurie['id_ecurie']) . '">' . htmlspecialchars($ecurie['nom']) . '</option>';
+            $selected = ($ecurie['id_ecurie'] == $pilote->getIdEcurie()) ? 'selected' : '';
+            echo '<option value="' . htmlspecialchars($ecurie['id_ecurie']) . '" ' . $selected . '>' . htmlspecialchars($ecurie['nom']) . '</option>';
         }
         ?>
     </select><br>
+
+    <label for="id_voiture">Voiture</label>
+    <select name="id_voiture" id="id_voiture" required>
+        <option value="">Sélectionnez une voiture</option>
+        <?php
+        // Charger les voitures disponibles depuis la base de données
+        $query = "SELECT id_voiture, moteur FROM voitures";
+        $stmt = $conn->prepare($query);
+        $stmt->execute();
+        $voitures = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($voitures as $voiture) {
+            $selected = ($voiture['id_voiture'] == $pilote->getIdVoiture()) ? 'selected' : '';
+            echo '<option value="' . htmlspecialchars($voiture['id_voiture']) . '" ' . $selected . '>' . htmlspecialchars($voiture['moteur']) . '</option>';
+        }
+        ?>
+    </select><br>
+
     <label for="nationalite">Nationalité</label>
     <input type="text" name="nationalite" id="nationalite" value="<?= htmlspecialchars($pilote->getNationalite()) ?>" required><br>
 
     <label for="age">Âge</label>
     <input type="number" name="age" id="age" value="<?= htmlspecialchars($pilote->getAge()) ?>" required><br>
+
+    <label for="photo">Photo</label>
+    <input type="file" name="photo" id="photo"><br>
 
     <!-- Bouton pour soumettre les modifications -->
     <input type="submit" value="Mettre à jour">

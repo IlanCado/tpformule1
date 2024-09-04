@@ -1,26 +1,39 @@
 <?php
 
 require_once 'models/Pilote.php';
+require_once 'models/Voiture.php';
 
 class PiloteController {
 
     // Méthode pour afficher la liste des pilotes
     public function index() {
         $pilote = new Pilote();
-        $result = $pilote->read();  // Appel de la méthode read() du modèle Pilote
+        $result = $pilote->read();  
         $pilotes = $result->fetchAll(PDO::FETCH_ASSOC);
-        require 'views/pilotes/index.php';  // Charge la vue pour afficher les pilotes
+        require 'views/pilotes/index.php';
     }
 
     // Méthode pour créer un nouveau pilote
     public function create() {
+        $voiture = new Voiture();
+        $voitures = $voiture->read()->fetchAll(PDO::FETCH_ASSOC);
+
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $pilote = new Pilote();
-            $pilote->setNumero($_POST['numero']);  // Utilisation du setter
-            $pilote->setNom($_POST['nom']);  // Utilisation du setter
-            $pilote->setIdEcurie($_POST['id_ecurie']);  // Utilisation du setter
-            $pilote->setNationalite($_POST['nationalite']);  // Utilisation du setter
-            $pilote->setAge($_POST['age']);  // Utilisation du setter
+            $pilote->setNumero($_POST['numero']);
+            $pilote->setNom($_POST['nom']);
+            $pilote->setIdEcurie($_POST['id_ecurie']);
+            $pilote->setNationalite($_POST['nationalite']);
+            $pilote->setAge($_POST['age']);
+            $pilote->setIdVoiture($_POST['id_voiture']);  
+
+            // Gestion de l'upload de la photo
+            if (isset($_FILES['photo']) && $_FILES['photo']['error'] == 0) {
+                $filename = basename($_FILES['photo']['name']);
+                $filepath = 'uploads/' . $filename;
+                move_uploaded_file($_FILES['photo']['tmp_name'], $filepath);
+                $pilote->setPhoto($filename);
+            }
 
             if ($pilote->create()) {
                 header("Location: index.php?controller=pilote&action=index");
@@ -33,39 +46,46 @@ class PiloteController {
     // Méthode pour éditer un pilote existant
     public function edit() {
         $pilote = new Pilote();
-    
+        $voiture = new Voiture();
+        $voitures = $voiture->read()->fetchAll(PDO::FETCH_ASSOC);
+
         if (isset($_GET['id'])) {
-            $pilote->setIdPilote($_GET['id']);  // Utilisation du setter
-    
+            $pilote->setIdPilote($_GET['id']);
+
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
-                // Mise à jour du pilote
                 $pilote->setNumero($_POST['numero']);
                 $pilote->setNom($_POST['nom']);
                 $pilote->setIdEcurie($_POST['id_ecurie']);
                 $pilote->setNationalite($_POST['nationalite']);
                 $pilote->setAge($_POST['age']);
-    
+                $pilote->setIdVoiture($_POST['id_voiture']);
+
+                // Gestion de l'upload de la photo
+                if (isset($_FILES['photo']) && $_FILES['photo']['error'] == 0) {
+                    $filename = basename($_FILES['photo']['name']);
+                    $filepath = 'uploads/' . $filename;
+                    move_uploaded_file($_FILES['photo']['tmp_name'], $filepath);
+                    $pilote->setPhoto($filename);
+                }
+
                 if ($pilote->update()) {
                     header("Location: index.php?controller=pilote&action=index");
-                    exit();  // Assurez-vous que le script s'arrête ici après la redirection
+                    exit();
                 } else {
                     echo "Erreur lors de la mise à jour du pilote.";
                 }
             } else {
-                // Affichage du formulaire de modification
                 $data = $pilote->readSingle();
                 if ($data) {
-                    require 'views/pilotes/edit.php';  // Charge la vue d'édition
+                    require 'views/pilotes/edit.php';
                 } else {
                     echo "Pilote non trouvé.";
                 }
             }
-        } else {
-            echo "ID du pilote manquant.";
         }
     }
-    
-    // Méthode pour supprimer un pilote (ajoutez-la si nécessaire)
+
+    // Méthode pour supprimer un pilote
     public function delete() {
         $pilote = new Pilote();
         if (isset($_GET['id'])) {

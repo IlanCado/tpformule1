@@ -7,15 +7,13 @@
         <tr>
             <th>Pilote</th>
             <th>Voiture</th>
-            <th>Écurie</th>
         </tr>
     </thead>
     <tbody>
         <?php foreach ($result as $row): ?>
             <tr>
                 <td><?= htmlspecialchars($row['pilote_nom']) ?></td>
-                <td><?= htmlspecialchars($row['voiture_moteur']) ?></td>
-                <td><?= htmlspecialchars($row['ecurie_nom']) ?></td>
+                <td><?= htmlspecialchars($row['voiture_moteur'] ?? 'Pas de voiture') ?></td>
             </tr>
         <?php endforeach; ?>
     </tbody>

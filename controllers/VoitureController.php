@@ -7,18 +7,26 @@ class VoitureController {
     // Méthode pour afficher la liste des voitures
     public function index() {
         $voiture = new Voiture();
-        $result = $voiture->read();  // Appel de la méthode read() du modèle Voiture
+        $result = $voiture->read();  
         $voitures = $result->fetchAll(PDO::FETCH_ASSOC);
-        require 'views/voitures/index.php';  // Charge la vue pour afficher les voitures
+        require 'views/voitures/index.php';
     }
 
     // Méthode pour créer une nouvelle voiture
     public function create() {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $voiture = new Voiture();
-            $voiture->setPoids($_POST['poids']);  // Utilisation du setter
-            $voiture->setPuissance($_POST['puissance']);  // Utilisation du setter
-            $voiture->setMoteur($_POST['moteur']);  // Utilisation du setter
+            $voiture->setPoids($_POST['poids']);  
+            $voiture->setPuissance($_POST['puissance']);  
+            $voiture->setMoteur($_POST['moteur']);  
+
+            // Gestion de l'upload de la photo
+            if (isset($_FILES['photo']) && $_FILES['photo']['error'] == 0) {
+                $filename = basename($_FILES['photo']['name']);
+                $filepath = 'uploads/' . $filename;
+                move_uploaded_file($_FILES['photo']['tmp_name'], $filepath);
+                $voiture->setPhoto($filename);
+            }
 
             if ($voiture->create()) {
                 header("Location: index.php?controller=voiture&action=index");
@@ -33,22 +41,28 @@ class VoitureController {
         $voiture = new Voiture();
     
         if (isset($_GET['id'])) {
-            $voiture->setIdVoiture($_GET['id']);  // Utilisation du setter
-    
+            $voiture->setIdVoiture($_GET['id']);
+
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
-                // Mise à jour des données de la voiture
                 $voiture->setPoids($_POST['poids']);
                 $voiture->setPuissance($_POST['puissance']);
                 $voiture->setMoteur($_POST['moteur']);
-    
+
+                // Gestion de l'upload de la photo
+                if (isset($_FILES['photo']) && $_FILES['photo']['error'] == 0) {
+                    $filename = basename($_FILES['photo']['name']);
+                    $filepath = 'uploads/' . $filename;
+                    move_uploaded_file($_FILES['photo']['tmp_name'], $filepath);
+                    $voiture->setPhoto($filename);
+                }
+
                 if ($voiture->update()) {
                     header("Location: index.php?controller=voiture&action=index");
-                    exit();  // Assurez-vous que l'exécution s'arrête après la redirection
+                    exit();
                 } else {
                     echo "Erreur lors de la mise à jour de la voiture.";
                 }
             } else {
-                // Affichage des données actuelles de la voiture dans le formulaire
                 $data = $voiture->readSingle();
                 if ($data) {
                     require 'views/voitures/edit.php';
@@ -60,9 +74,8 @@ class VoitureController {
             echo "ID de la voiture manquant.";
         }
     }
-    
 
-    // Méthode pour supprimer une voiture (ajoutez-la si nécessaire)
+    // Méthode pour supprimer une voiture
     public function delete() {
         $voiture = new Voiture();
         if (isset($_GET['id'])) {

@@ -11,7 +11,7 @@ if (!isset($voiture)) {
 
 <h2>Modifier la voiture</h2>
 
-<form action="index.php?controller=voiture&action=edit&id=<?= htmlspecialchars($voiture->getIdVoiture()) ?>" method="POST">
+<form action="index.php?controller=voiture&action=edit&id=<?= htmlspecialchars($voiture->getIdVoiture()) ?>" method="POST" enctype="multipart/form-data">
     <label for="poids">Poids</label>
     <input type="text" name="poids" id="poids" value="<?= htmlspecialchars($voiture->getPoids()) ?>" required><br>
 
@@ -36,6 +36,10 @@ if (!isset($voiture)) {
             echo '<option value="' . htmlspecialchars($ecurie['id_ecurie']) . '">' . htmlspecialchars($ecurie['nom']) . '</option>';
         }
         ?>
+
+<label for="photo">Photo</label>
+<input type="file" name="photo" id="photo"><br>
+
     </select><br>
     <!-- Bouton pour soumettre les modifications -->
     <input type="submit" value="Mettre à jour">

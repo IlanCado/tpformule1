@@ -10,6 +10,7 @@ class Voiture {
     private $poids;
     private $puissance;
     private $moteur;
+    private $photo;  // Ajouter le champ pour la photo
 
     public function __construct() {
         $database = new Database();
@@ -33,6 +34,10 @@ class Voiture {
         return $this->moteur;
     }
 
+    public function getPhoto() {  // Getter pour la photo
+        return $this->photo;
+    }
+
     // Setters
     public function setIdVoiture($id_voiture) {
         $this->id_voiture = $id_voiture;
@@ -48,6 +53,10 @@ class Voiture {
 
     public function setMoteur($moteur) {
         $this->moteur = $moteur;
+    }
+
+    public function setPhoto($photo) {  // Setter pour la photo
+        $this->photo = $photo;
     }
 
     // Lire toutes les voitures
@@ -71,6 +80,7 @@ class Voiture {
             $this->poids = $row['poids'];
             $this->puissance = $row['puissance'];
             $this->moteur = $row['moteur'];
+            $this->photo = $row['photo'];  // Ajout de la photo
             return $row;
         }
 
@@ -79,12 +89,13 @@ class Voiture {
 
     // Créer une nouvelle voiture
     public function create() {
-        $query = "INSERT INTO " . $this->table_name . " SET poids=:poids, puissance=:puissance, moteur=:moteur";
+        $query = "INSERT INTO " . $this->table_name . " SET poids=:poids, puissance=:puissance, moteur=:moteur, photo=:photo";
         $stmt = $this->conn->prepare($query);
 
         $stmt->bindParam(":poids", $this->poids);
         $stmt->bindParam(":puissance", $this->puissance);
         $stmt->bindParam(":moteur", $this->moteur);
+        $stmt->bindParam(":photo", $this->photo);  // Lier la photo
 
         if ($stmt->execute()) {
             return true;
@@ -96,7 +107,7 @@ class Voiture {
     // Mettre à jour une voiture existante
     public function update() {
         $query = "UPDATE " . $this->table_name . " 
-                  SET poids = :poids, puissance = :puissance, moteur = :moteur
+                  SET poids = :poids, puissance = :puissance, moteur = :moteur, photo = :photo
                   WHERE id_voiture = :id_voiture";
     
         $stmt = $this->conn->prepare($query);
@@ -104,6 +115,7 @@ class Voiture {
         $stmt->bindParam(':poids', $this->poids);
         $stmt->bindParam(':puissance', $this->puissance);
         $stmt->bindParam(':moteur', $this->moteur);
+        $stmt->bindParam(':photo', $this->photo);  // Mise à jour de la photo
         $stmt->bindParam(':id_voiture', $this->id_voiture);
     
         if ($stmt->execute()) {
@@ -113,7 +125,6 @@ class Voiture {
             return false;
         }
     }
-    
 
     // Supprimer une voiture
     public function delete() {

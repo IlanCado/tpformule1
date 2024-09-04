@@ -35,7 +35,7 @@ try {
         pays VARCHAR(100) NOT NULL,
         sponsor VARCHAR(100),
         id_voiture INT,
-        FOREIGN KEY (id_voiture) REFERENCES voitures(id_voiture) ON DELETE SET NULL
+        CONSTRAINT fk_voiture_ecurie FOREIGN KEY (id_voiture) REFERENCES voitures(id_voiture) ON DELETE SET NULL
     )";
     $conn->exec($sql);
     echo "Table 'ecuries' créée avec succès.<br>";
@@ -48,7 +48,9 @@ try {
         id_ecurie INT,
         nationalite VARCHAR(100) NOT NULL,
         age INT NOT NULL,
-        FOREIGN KEY (id_ecurie) REFERENCES ecuries(id_ecurie) ON DELETE SET NULL
+        id_voiture INT,
+        CONSTRAINT fk_ecurie_pilote FOREIGN KEY (id_ecurie) REFERENCES ecuries(id_ecurie) ON DELETE SET NULL,
+        CONSTRAINT fk_voiture_pilote FOREIGN KEY (id_voiture) REFERENCES voitures(id_voiture) ON DELETE SET NULL
     )";
     $conn->exec($sql);
     echo "Table 'pilotes' créée avec succès.<br>";
@@ -70,10 +72,10 @@ try {
     echo "Données initiales insérées dans la table 'ecuries'.<br>";
 
     // Insérer des données initiales dans la table 'pilotes'
-    $sql = "INSERT INTO pilotes (numero, nom, id_ecurie, nationalite, age) VALUES 
-            (7, 'Schumacher', 1, 'Allemand', 32),
-            (44, 'Hamilton', 2, 'Britannique', 36),
-            (33, 'Verstappen', 3, 'Néerlandais', 24)";
+    $sql = "INSERT INTO pilotes (numero, nom, id_ecurie, nationalite, age, id_voiture) VALUES 
+            (7, 'Schumacher', 1, 'Allemand', 32, 1),
+            (44, 'Hamilton', 2, 'Britannique', 36, 2),
+            (33, 'Verstappen', 3, 'Néerlandais', 24, 3)";
     $conn->exec($sql);
     echo "Données initiales insérées dans la table 'pilotes'.<br>";
 
